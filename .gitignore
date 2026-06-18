@@ -1,0 +1,25 @@
+# ==========================================
+# Archivos de Entorno y Credenciales (¡MUY IMPORTANTE!)
+# ==========================================
+.env
+.env.local
+*.sqlite3  # Si usas SQLite en pruebas locales y no quieres subir los datos
+
+# ==========================================
+# Backend Python (Django / Entornos Virtuales)
+# ==========================================
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+
+# ==========================================
+# Archivos del Sistema Operativo y Editores
+# ==========================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
