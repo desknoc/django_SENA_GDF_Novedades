@@ -42,7 +42,7 @@ class Usuario(AbstractBaseUser,PermissionsMixin):
     fecha_registro = models.DateField(auto_now_add=True)
     ultima_actualizacion = models.DateField(auto_now=True)
 
-    USERNAME_FIELD = 'documento' #esto hace que se use el documento en luegar de username
+    USERNAME_FIELD = 'documento' #esto hace que se use el documento en lugar de username
     REQUIRED_FIELDS = ["primer_nombre", "primer_apellido", "tipo_documento", "celular", "correo_electronico"]
 
     objects = UserManager()
