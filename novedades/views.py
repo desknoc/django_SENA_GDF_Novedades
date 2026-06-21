@@ -6,6 +6,12 @@ import base64 #esto es para poder convertir la imagen que nos den el el formular
 # Create your views here.
 
 def Home(request):
+    if request.method == 'GET':
+        #Traemos todas las novedades
+        novedades = Comunicado.objects.all().values()
+        # convertimos las novedades en lista
+        lista_novedades = list(novedades)
+        return JsonResponse(lista_novedades, safe=False) # Se usa safe=False para que nos acepte lista de datos, ya que solo se aceptan diccionarios por defecto con JsonResponse
     return HttpResponse("Novedades")
 
 def CrearNovedad(request):
