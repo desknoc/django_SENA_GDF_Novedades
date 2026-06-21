@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
         usuario = self.create_user(documento=documento, password=password, **extra_fields)
         usuario.is_staff=True
         usuario.is_superuser=True
-        usuario.rol='ADMIN'
+        usuario.rol='ADMIN' # con esto al crear un superusuario sí o sí va crearser con el rol de ADMIN
         usuario.save(using=self._db)
         return usuario
     
