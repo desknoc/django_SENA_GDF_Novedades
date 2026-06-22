@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block sidebar %}
+    {% if user.rol == "ADMIN" %}
+        {% include "includes/sidebar_admin.html" %}
+    {% else %}
+        {% include "includes/sidebar_aprendiz.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+    {% include "includes/header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="p-4">
+    <div class="detalle-container">
+        <a href="{% url 'home' %}" class="btn btn-secondary mb-4">
+            <ion-icon name="arrow-back-outline"></ion-icon> Volver
+        </a>
+
+        <div id="detalle-loading" class="text-center py-5">
+            <div class="spinner"></div>
+            <p class="text-muted mt-2">Cargando detalle...</p>
+        </div>
+
+        <div id="detalle-content" style="display: none;">
+            <div class="card shadow-sm border-0">
+                <div class="card-header header-gradient">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0" id="detalle-titulo"></h4>
+                        <span class="badge badge-categoria" id="detalle-categoria"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if user.rol == "ADMIN" %}
+                    <div class="d-flex gap-2 mb-4">
+                        <button class="btn btn-outline-success btn-sm" onclick="editarNovedad({{ novedad_id }})">
+                            <ion-icon name="create-outline"></ion-icon> Editar
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarNovedad({{ novedad_id }})">
+                            <ion-icon name="trash-outline"></ion-icon> Eliminar
+                        </button>
+                    </div>
+                    {% endif %}
+
+                    <div id="detalle-imagen-container" style="display: none;" class="mb-4">
+                        <img id="detalle-imagen" class="detalle-imagen" alt="Imagen de la novedad">
+                    </div>
+
+                    <p class="detalle-contenido" id="detalle-contenido"></p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3" style="border-top: 1px solid #e9ecef;">
+                        <small class="text-muted" id="detalle-fecha"></small>
+                        <a id="detalle-url" href="#" target="_blank" rel="noopener noreferrer" style="display: none;" class="btn btn-outline-info btn-sm">
+                            <ion-icon name="link-outline"></ion-icon> Más información
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/novedades.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarDetalleNovedad({{ novedad_id }});
+    });
+</script>
+{% endblock %}

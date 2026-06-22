@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA GDF - Iniciar Sesión</title>
+    <link rel="icon" href="{% static 'img/logosena.png' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-container" id="authContainer">
+
+            <!-- SIGN UP FORM -->
+            <div class="form-container sign-up-container">
+                <form class="auth-form" id="formRegistro" method="POST">
+                    {% csrf_token %}
+                    <h1>Crea Tu Cuenta</h1>
+                    <p>Ingresa tus datos para registrarte en SENA GDF</p>
+
+                    <div class="scroll-form">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="person-outline"></ion-icon>
+                                    <input type="text" name="primer_nombre" class="auth-input" placeholder="Primer Nombre" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="person-outline"></ion-icon>
+                                    <input type="text" name="segundo_nombre" class="auth-input" placeholder="Segundo Nombre">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="people-outline"></ion-icon>
+                                    <input type="text" name="primer_apellido" class="auth-input" placeholder="Primer Apellido" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="people-outline"></ion-icon>
+                                    <input type="text" name="segundo_apellido" class="auth-input" placeholder="Segundo Apellido">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="card-outline"></ion-icon>
+                                    <select name="tipo_documento" class="auth-select with-icon" required>
+                                        <option value="" disabled selected>Tipo de Doc.</option>
+                                        <option value="CC">Cédula</option>
+                                        <option value="TI">Tarjeta de Ident.</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="id-card-outline"></ion-icon>
+                                    <input type="text" name="documento" class="auth-input" placeholder="N° Documento" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="call-outline"></ion-icon>
+                                    <input type="text" name="celular" class="auth-input" placeholder="Número de Celular" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="mail-outline"></ion-icon>
+                                    <input type="email" name="correo_electronico" class="auth-input" placeholder="Correo Electrónico" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="lock-closed-outline"></ion-icon>
+                                    <input type="password" name="password" class="auth-input" placeholder="Contraseña (mín 8 car.)" minlength="8" required>
+                                    <span class="password-toggle" onclick="togglePassRegistro(this)">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-auth">
+                                    <ion-icon name="school-outline"></ion-icon>
+                                    <input type="text" name="grupo_formacion" class="auth-input" placeholder="N° Ficha (Grupo)" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="auth-btn mt-3">Registrarse</button>
+                </form>
+            </div>
+
+            <!-- SIGN IN FORM -->
+            <div class="form-container sign-in-container">
+                <form class="auth-form" id="formLogin" method="POST">
+                    {% csrf_token %}
+                    <img src="{% static 'img/logosena.png' %}" alt="logo-sena" class="logosena-auth">
+                    <h1>SENA GDF</h1>
+                    <p>Inicia sesión con tu documento y contraseña</p>
+
+                    <div class="input-group-auth">
+                        <ion-icon name="card-outline"></ion-icon>
+                        <select name="tipo_documento" class="auth-select with-icon" required>
+                            <option value="" disabled selected hidden>Selecciona tu documento</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group-auth">
+                        <ion-icon name="person-circle-outline"></ion-icon>
+                        <input type="text" name="documento" class="auth-input" placeholder="Número de documento" required>
+                    </div>
+
+                    <div class="input-group-auth">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" name="password" class="auth-input" placeholder="Contraseña" required>
+                    </div>
+
+                    <button type="submit" class="auth-btn">Ingresar</button>
+                </form>
+            </div>
+
+            <!-- OVERLAY PANEL -->
+            <div class="overlay-container">
+                <div class="overlay-panel overlay-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Inicia sesión con tu información personal.</p>
+                    <button class="auth-btn ghost" id="signIn">Iniciar Sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Hola, Aprendiz!</h1>
+                    <p>Ingresa tus datos y comienza tu viaje en SENA GDF.</p>
+                    <button class="auth-btn ghost" id="signUp">Crear Cuenta</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{% static 'js/auth.js' %}"></script>
+</body>
+</html>

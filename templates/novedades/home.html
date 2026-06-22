@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block sidebar %}
+    {% if user.rol == "ADMIN" %}
+        {% include "includes/sidebar_admin.html" %}
+    {% else %}
+        {% include "includes/sidebar_aprendiz.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+    {% include "includes/header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="p-4">
+    <h3 class="mb-4 d-flex align-items-center gap-2">
+        <ion-icon name="newspaper-outline" style="color: #28a745; font-size: 2rem;"></ion-icon>
+        Publicaciones
+    </h3>
+
+    <div id="novedades-container">
+        <div class="text-center py-5" id="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-muted mt-2">Cargando publicaciones...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/novedades.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', cargarNovedadesPublicas);
+</script>
+{% endblock %}

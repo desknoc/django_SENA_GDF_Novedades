@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block sidebar %}
+    {% include "includes/sidebar_admin.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "includes/header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="p-4">
+    <div class="card shadow-sm border-0" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-header header-gradient d-flex align-items-center gap-2">
+            <ion-icon name="{{ accion == 'editar'|yesno:'create-outline,newspaper-outline' }}" style="font-size: 1.2rem;"></ion-icon>
+            <h4 class="mb-0">{{ accion|title }} Publicación</h4>
+        </div>
+
+        <div class="card-body p-4">
+            <form id="formNovedad" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if novedad_id %}
+                    <input type="hidden" id="novedad-id" value="{{ novedad_id }}">
+                {% endif %}
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <ion-icon name="newspaper-outline" style="color: #28a745;"></ion-icon> Título
+                    </label>
+                    <input type="text" class="form-control form-control-lg" id="titulo" name="titulo"
+                           placeholder="Ingrese el título de la publicación" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <ion-icon name="document-text-outline" style="color: #28a745;"></ion-icon> Contenido
+                    </label>
+                    <textarea class="form-control" id="contenido" name="contenido" rows="6"
+                              placeholder="Escriba el contenido de la publicación" required></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="pricetag-outline" style="color: #28a745;"></ion-icon> Categoría
+                            </label>
+                            <select class="form-select" id="categoria" name="categoria">
+                                <option value="">Seleccione una categoría</option>
+                                <option value="Noticias">Noticias</option>
+                                <option value="Eventos">Eventos</option>
+                                <option value="Anuncios">Anuncios</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="link-outline" style="color: #28a745;"></ion-icon> URL de referencia
+                            </label>
+                            <input type="url" class="form-control" id="url_referencia" name="url_referencia"
+                                   placeholder="https://ejemplo.com">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <ion-icon name="image-outline" style="color: #28a745;"></ion-icon> Imagen
+                    </label>
+                    <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                    <small class="text-muted d-block mt-1">Formatos: PNG, JPG, GIF, WebP — Máx 5MB</small>
+                    <div id="imagen-preview-container" class="mt-2 position-relative d-inline-block" style="display: none;">
+                        <img id="imagen-preview" class="img-preview" alt="Vista previa">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="quitarImagen()"
+                                style="position: absolute; top: 5px; right: 5px; border-radius: 50%; width: 24px; height: 24px; padding: 0; line-height: 16px;">
+                            &times;
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 pt-2">
+                    <button type="submit" class="btn btn-success btn-lg d-flex align-items-center gap-2" id="btn-submit">
+                        <ion-icon name="save-outline"></ion-icon>
+                        <span id="btn-text">{{ accion == 'editar'|yesno:'Actualizar,Publicar' }}</span>
+                    </button>
+                    <a href="{% url 'admin_novedades' %}" class="btn btn-secondary btn-lg d-flex align-items-center gap-2">
+                        <ion-icon name="arrow-back-outline"></ion-icon> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/novedades.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if novedad_id %}
+            cargarFormEditar({{ novedad_id }});
+        {% endif %}
+        initFormNovedad();
+    });
+</script>
+{% endblock %}
