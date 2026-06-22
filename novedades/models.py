@@ -7,7 +7,7 @@ class Comunicado(models.Model): #modelos de la tabla Comunicado
     contenido = models.CharField(max_length=1000)
     categoria = models.CharField(max_length=50)
     imagen_url = models.TextField()
-    url_referencia = models.TextField()
+    url_referencia = models.CharField(max_length=500)
     fecha_publicacion = models.DateField(auto_now_add=True)
     ultima_actualizacion = models.DateField(auto_now=True)
 
