@@ -24,7 +24,7 @@ def CrearNovedad(request):
         url_referencia = request.POST.get('url_referencia')
         # Verificamos si el usuario esté autenticado y sea admin
         if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Credenciales inválidas no puede crear novedades'})
+            return JsonResponse({'error': 'Credenciales inválidas'})
         if request.user.rol != 'ADMIN':
             return JsonResponse({'error': 'Solo los admin pueden crear novedades'})
         # Convertimos la imagen que nos mandan del formulario en base64
@@ -55,7 +55,7 @@ def EditarNovedad(request, id):
         url_referencia = request.POST.get('url_referencia')
         # Verificamos que el usuario sí esté autenticado y sea ADMIN
         if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Credenciales inválidas no puede crear novedades'})
+            return JsonResponse({'error': 'Credenciales inválidas'})
         if request.user.rol != 'ADMIN':
             return JsonResponse({'error': 'Solo los admin pueden editar novedades'})
         # Buscamos la novedad por id
@@ -82,7 +82,7 @@ def EliminarNovedad(request, id):
     if request.method == 'POST':
         # Verificamos que el usuario sí esté autenticado y sea ADMIN
         if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Credenciales inválidas no puede crear novedades'})
+            return JsonResponse({'error': 'Credenciales inválidas'})
         if request.user.rol != 'ADMIN':
             return JsonResponse({'error': 'Solo los admin pueden eliminar novedades'})
         # Buscamos la novedad por id
@@ -91,3 +91,17 @@ def EliminarNovedad(request, id):
         novedad.delete()
         return JsonResponse({'mensaje': 'Novedad eliminada'})
     return HttpResponse("Eliminar Novedades")
+
+def DetalleNovedad(request, id):
+    if request.method == 'GET':
+        # Buscamos la novedad por id
+        novedad = get_object_or_404(Comunicado, id=id)
+        return JsonResponse({
+            'titulo': novedad.titulo,
+            'contenido': novedad.contenido,
+            'categoria': novedad.categoria,
+            'imagen_url': novedad.imagen_url,
+            'url_referencia': novedad.url_referencia,
+            'ultima_actualizacion': novedad.ultima_actualizacion
+        })
+    return HttpResponse("Detalles de la novedad")

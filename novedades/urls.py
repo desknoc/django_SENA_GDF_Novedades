@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.Home),
     path('editar/<int:id>/', views.EditarNovedad), #Buscamos por id
     path('crearnovedad/', views.CrearNovedad),
-    path('eliminarnovedad/<int:id>/', views.EliminarNovedad) #Buscamos por id
+    path('eliminarnovedad/<int:id>/', views.EliminarNovedad), #Buscamos por id
+    path('detallenovedad/<int:id>/', views.DetalleNovedad) #Buscamos por id
 ]
