@@ -351,6 +351,11 @@
     max-width: calc(50% - 0.25rem);
 }
 
+/* ========== SWEETALERT2 ========== */
+.swal2-popup {
+    font-family: 'Inter', sans-serif;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

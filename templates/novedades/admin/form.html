@@ -13,7 +13,11 @@
 <div class="p-4">
     <div class="card shadow-sm border-0" style="max-width: 800px; margin: 0 auto;">
         <div class="card-header header-gradient d-flex align-items-center gap-2">
-            <ion-icon name="{{ accion == 'editar'|yesno:'create-outline,newspaper-outline' }}" style="font-size: 1.2rem;"></ion-icon>
+            {% if accion == 'editar' %}
+                <ion-icon name="create-outline" style="font-size: 1.2rem;"></ion-icon>
+            {% else %}
+                <ion-icon name="newspaper-outline" style="font-size: 1.2rem;"></ion-icon>
+            {% endif %}
             <h4 class="mb-0">{{ accion|title }} Publicación</h4>
         </div>
 
@@ -40,7 +44,7 @@
                               placeholder="Escriba el contenido de la publicación" required></textarea>
                 </div>
 
-                <div style="display: flex; gap: 1rem;">
+                <div class="form-row">
                     <div style="flex: 1;">
                         <div class="form-group">
                             <label class="form-label">
@@ -83,7 +87,7 @@
                 <div class="d-flex gap-2 pt-2">
                     <button type="submit" class="btn btn-success btn-lg d-flex align-items-center gap-2" id="btn-submit">
                         <ion-icon name="save-outline"></ion-icon>
-                        <span id="btn-text">{{ accion == 'editar'|yesno:'Actualizar,Publicar' }}</span>
+                        <span id="btn-text">{% if accion == 'editar' %}Actualizar{% else %}Publicar{% endif %}</span>
                     </button>
                     <a href="{% url 'admin_novedades' %}" class="btn btn-secondary btn-lg d-flex align-items-center gap-2">
                         <ion-icon name="arrow-back-outline"></ion-icon> Cancelar

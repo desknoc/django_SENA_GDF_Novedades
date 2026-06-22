@@ -47,7 +47,7 @@ def registrarse(request):
 
 def cerrarSesion(request):
     logout(request)
-    return HttpResponse("Sesión Cerrada")
+    return redirect('login_template')
 
 
 # ============================================================

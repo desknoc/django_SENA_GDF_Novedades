@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect # El get_object_or_404 es para que si no obtenemos el id nos lance un 404
 from django.http import HttpResponse, JsonResponse
+from django.db import OperationalError
 from .models import Comunicado
 from usuarios.models import Usuario
 import base64 #esto es para poder convertir la imagen que nos den el el formulario a base64
@@ -44,13 +45,20 @@ def CrearNovedad(request):
         else:
             imagen_base64 = '' # crea la variable para guardar la imagen codificada fuera del if
         # Creamos el objeto 'novedad' y mandamos a la base de datos la novedad
-        novedad = Comunicado.objects.create(
-            titulo = titulo,
-            contenido = contenido,
-            categoria = categoria,
-            imagen_url = imagen_base64,
-            url_referencia = url_referencia
-        )
+        try: #Este try está agregado por la IA, lo que está adentro de este try sí lo hice yo
+            # De aquí
+            novedad = Comunicado.objects.create(
+                titulo = titulo,
+                contenido = contenido,
+                categoria = categoria,
+                imagen_url = imagen_base64,
+                url_referencia = url_referencia
+                # Hasta aquí hice yo, el resto del try con el except es de la IA
+            )
+        except OperationalError as e:
+            if e.args[0] == 1153:
+                return JsonResponse({'error': 'La imagen supera el límite permitido. Reducí su tamaño o comprimila antes de subirla.'})
+            return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'})
         return JsonResponse({'mensaje': 'Novedad creada exitosamente'})
     
     return HttpResponse("Crea Novedades Aquí")
@@ -78,13 +86,20 @@ def EditarNovedad(request, id):
             imagen_base64 = ''
         # Actualizamos la base de datos con los nuevos datos proporcionados por el usuario
         # Lo hacemos filtrando por id, para que no se actualicen todas las novedades omaga
-        editar = Comunicado.objects.filter(id=id).update(
-            titulo = titulo,
-            contenido = contenido,
-            categoria = categoria,
-            imagen_url = imagen_base64,
-            url_referencia = url_referencia
-        )
+        try: # Try hecho con IA pero lo que está adentro lo hice yo
+            # De aquí
+            Comunicado.objects.filter(id=id).update(
+                titulo = titulo,
+                contenido = contenido,
+                categoria = categoria,
+                imagen_url = imagen_base64,
+                url_referencia = url_referencia
+                # Hasta aquí es mío, el try y el except es de la IA
+            )
+        except OperationalError as e:
+            if e.args[0] == 1153:
+                return JsonResponse({'error': 'La imagen supera el límite permitido. Reduce su tamaño o comprimila antes de subirla.'})
+            return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'}) #esto es una correción que me dió la IA para que no hubieran errores en subir imagenes que sean más pesadas de lo permitido
         return JsonResponse({'mensaje': 'Novedad actualizada correctamente'})
     return HttpResponse("Editar Novedades")
 
