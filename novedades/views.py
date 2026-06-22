@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404 # El get_object_or_404 es para que si no obtenemos el id nos lance un 404
+from django.shortcuts import render, get_object_or_404, redirect # El get_object_or_404 es para que si no obtenemos el id nos lance un 404
 from django.http import HttpResponse, JsonResponse
 from .models import Comunicado
 from usuarios.models import Usuario
@@ -7,11 +7,21 @@ import base64 #esto es para poder convertir la imagen que nos den el el formular
 
 def Home(request):
     if request.method == 'GET':
-        #Traemos todas las novedades
-        novedades = Comunicado.objects.all().values()
-        # convertimos las novedades en lista
-        lista_novedades = list(novedades)
-        return JsonResponse(lista_novedades, safe=False) # Se usa safe=False para que nos acepte lista de datos, ya que solo se aceptan diccionarios por defecto con JsonResponse
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        if is_ajax:
+            # API call - devuelve JSON (comportamiento original)
+            novedades = Comunicado.objects.all().values()
+            lista_novedades = list(novedades)
+            return JsonResponse(lista_novedades, safe=False)
+        else:
+            # Navegación directa - redirige al template home
+            if not request.user.is_authenticated:
+                return redirect('login_template')
+            nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+            return render(request, 'novedades/home.html', {
+                'nombre_usuario': nombre
+            })
     return HttpResponse("Novedades")
 
 def CrearNovedad(request):
@@ -97,11 +107,98 @@ def DetalleNovedad(request, id):
         # Buscamos la novedad por id
         novedad = get_object_or_404(Comunicado, id=id)
         return JsonResponse({
+            'id': novedad.id,
             'titulo': novedad.titulo,
             'contenido': novedad.contenido,
             'categoria': novedad.categoria,
             'imagen_url': novedad.imagen_url,
             'url_referencia': novedad.url_referencia,
+            'fecha_publicacion': novedad.fecha_publicacion,
             'ultima_actualizacion': novedad.ultima_actualizacion
         })
     return HttpResponse("Detalles de la novedad")
+
+
+# ============================================================
+# VISTAS DE TEMPLATES (Frontend) - NO MODIFICAR LAS DE ARRIBA
+# ============================================================
+
+def home_template(request):
+    """Vista que renderiza el template del home con novedades"""
+    if not request.user.is_authenticated:
+        return redirect('login_template')
+    
+    nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+    return render(request, 'novedades/home.html', {
+        'nombre_usuario': nombre
+    })
+
+
+def detalle_template(request, id):
+    """Vista que renderiza el template de detalle de novedad"""
+    if not request.user.is_authenticated:
+        return redirect('login_template')
+    
+    # Verificamos que la novedad exista
+    try:
+        novedad = Comunicado.objects.get(id=id)
+    except Comunicado.DoesNotExist:
+        return redirect('error404')
+    
+    nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+    return render(request, 'novedades/detalle.html', {
+        'nombre_usuario': nombre,
+        'novedad_id': novedad.id
+    })
+
+
+def admin_novedades_template(request):
+    """Vista que renderiza el listado admin de novedades"""
+    if not request.user.is_authenticated:
+        return redirect('login_template')
+    if request.user.rol != 'ADMIN':
+        return redirect('home')
+    
+    nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+    return render(request, 'novedades/admin/lista.html', {
+        'nombre_usuario': nombre
+    })
+
+
+def admin_novedad_crear_template(request):
+    """Vista que renderiza el formulario para crear novedad"""
+    if not request.user.is_authenticated:
+        return redirect('login_template')
+    if request.user.rol != 'ADMIN':
+        return redirect('home')
+    
+    nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+    return render(request, 'novedades/admin/form.html', {
+        'nombre_usuario': nombre,
+        'accion': 'crear'
+    })
+
+
+def admin_novedad_editar_template(request, id):
+    """Vista que renderiza el formulario para editar novedad"""
+    if not request.user.is_authenticated:
+        return redirect('login_template')
+    if request.user.rol != 'ADMIN':
+        return redirect('home')
+    
+    try:
+        novedad = Comunicado.objects.get(id=id)
+    except Comunicado.DoesNotExist:
+        return redirect('admin_novedades')
+    
+    nombre = f"{request.user.primer_nombre} {request.user.primer_apellido}"
+    return render(request, 'novedades/admin/form.html', {
+        'nombre_usuario': nombre,
+        'accion': 'editar',
+        'novedad_id': novedad.id
+    })
+
+
+def error404_template(request):
+    """Vista para páginas no encontradas"""
+    return render(request, 'error404.html')

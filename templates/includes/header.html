@@ -1,0 +1,21 @@
+{% load static %}
+<div class="text-white p-4 d-flex justify-content-between align-items-center header-fixed">
+    <div>
+        <h5 class="titulo" style="font-family: 'Inter', sans-serif;">Bienvenid@, {{ nombre_usuario|default:"Usuario" }}</h5>
+        <p style="margin: 0; opacity: 0.8; font-size: 0.9rem;">Mantente al día con las novedades</p>
+    </div>
+    <div class="d-flex align-items-center">
+        <ion-icon name="person-circle-outline" style="font-size: 1.5rem; margin-right: 8px;"></ion-icon>
+        <span>{{ nombre_usuario|default:"Usuario" }}</span>
+        <span class="ms-3" id="reloj" style="font-family: monospace;"></span>
+    </div>
+</div>
+
+<script>
+    function actualizarReloj() {
+        const ahora = new Date();
+        document.getElementById('reloj').textContent = ahora.toLocaleTimeString();
+    }
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+</script>
