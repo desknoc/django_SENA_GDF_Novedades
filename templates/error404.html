@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA GDF - Página no encontrada</title>
+    <link rel="icon" href="{% static 'img/logosena.png' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'css/error404.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="error404-container">
+        <div class="error404-content">
+            <div class="error404-icon">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+            </div>
+            <h1 class="error404-title">404</h1>
+            <h2 class="error404-subtitle">¡Ups! Acceso Restringido</h2>
+            <p class="error404-text">
+                La página que buscas no existe o no tienes los permisos necesarios para acceder a ella.
+            </p>
+            <a href="{% url 'home' %}" class="btn-back">
+                Volver al Inicio
+            </a>
+        </div>
+    </div>
+</body>
+</html>
