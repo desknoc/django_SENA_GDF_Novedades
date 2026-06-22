@@ -57,7 +57,7 @@ def EditarNovedad(request, id):
         if not request.user.is_authenticated:
             return JsonResponse({'error': 'Credenciales inválidas no puede crear novedades'})
         if request.user.rol != 'ADMIN':
-            return JsonResponse({'error': 'Solo los admin pueden crear novedades'})
+            return JsonResponse({'error': 'Solo los admin pueden editar novedades'})
         # Buscamos la novedad por id
         novedad = get_object_or_404(Comunicado, id=id)
         # Convertimos la imagen que nos mandan del formulario en base64
@@ -76,4 +76,18 @@ def EditarNovedad(request, id):
             url_referencia = url_referencia
         )
         return JsonResponse({'mensaje': 'Novedad actualizada correctamente'})
-    return HttpResponse("Gestiona Novedades Aquí")
+    return HttpResponse("Editar Novedades")
+
+def EliminarNovedad(request, id):
+    if request.method == 'POST':
+        # Verificamos que el usuario sí esté autenticado y sea ADMIN
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Credenciales inválidas no puede crear novedades'})
+        if request.user.rol != 'ADMIN':
+            return JsonResponse({'error': 'Solo los admin pueden eliminar novedades'})
+        # Buscamos la novedad por id
+        novedad = get_object_or_404(Comunicado, id=id)
+        #eliminamos la novedad ya buscada por id
+        novedad.delete()
+        return JsonResponse({'mensaje': 'Novedad eliminada'})
+    return HttpResponse("Eliminar Novedades")
