@@ -24,6 +24,19 @@ function togglePassRegistro(el) {
     }
 }
 
+// ========== CSRF TOKEN helper ==========
+function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+            return decodeURIComponent(cookie.substring(name.length + 1));
+        }
+    }
+    return '';
+}
+
 // ========== LOGIN ==========
 document.getElementById('formLogin').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -46,6 +59,7 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
             method: 'POST',
             body: formData,
             headers: {
+                'X-CSRFToken': getCSRFToken(),
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
@@ -108,6 +122,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
             method: 'POST',
             body: formData,
             headers: {
+                'X-CSRFToken': getCSRFToken(),
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });

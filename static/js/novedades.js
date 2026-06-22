@@ -385,7 +385,7 @@ document.getElementById('formEditar')?.addEventListener('submit', async function
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'No se pudo actualizar la novedad.',
+            text: error.message || 'No se pudo actualizar la novedad.',
             confirmButtonColor: '#28a745'
         });
     }

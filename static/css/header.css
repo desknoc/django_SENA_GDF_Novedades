@@ -6,6 +6,13 @@
     z-index: 900;
     background: #28a745;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    padding: 1.5rem 2.5rem;
+}
+
+.header-fixed h5,
+.header-fixed p {
+    margin: 0;
 }
 
 .header-icon {
@@ -17,4 +24,12 @@
 .header-icon-small {
     font-size: 1.1rem;
     margin-top: 3px;
+}
+
+/* ========== HEADER RESPONSIVE ========== */
+@media (max-width: 991.98px) {
+    .header-fixed {
+        left: 0;
+        width: 100%;
+    }
 }
