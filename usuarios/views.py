@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import Usuario
-from senagdf.validators import validar_documento, validar_nombre, validar_celular, validar_correo
+from senagdf.validators import validar_documento, validar_nombre, validar_celular, validar_correo, validar_password
 
 # Create your views here.
 
 def iniciarSesion(request):
     if request.method == 'POST':
+        # Validamos el regex para el documento en inicio de sesión
+        if not validar_documento(request.POST.get('documento')):
+            return HttpResponse("Credenciales inválidas")
         #autenticamos el usuario en la bd
         autenticacion = authenticate(documento = request.POST.get('documento'), password = request.POST.get('password'))
         if autenticacion is not None:
@@ -39,6 +42,8 @@ def registrarse(request):
         errores = [] # Metemos los errores dentro de este array para luego mandar una lista de errores
         if not validar_documento(documento):
             errores.append("El documento debe tener 10 dígitos")
+        if not validar_password(password):
+            errores.append("La contraseña debe tener mínimo 8 carateres")
         if not validar_nombre(primer_nombre):
             errores.append("El primer nombre solo puede incluír letras")
         if segundo_nombre and not validar_nombre(segundo_nombre):
