@@ -40,6 +40,8 @@ def CrearNovedad(request):
             return JsonResponse({'error': 'Solo los admin pueden crear novedades'})
         # Convertimos la imagen que nos mandan del formulario en base64
         if imagen:
+            if imagen.size > 5 * 1024 * 1024: # establecemos que la imagen sea como máximo de 5MB
+                return JsonResponse({'error' : 'La imagen supera el límite permitido'})
             bytes_imagen = imagen.read() # Leemos los bytes del archivo
             imagen_base64 = base64.b64encode(bytes_imagen).decode('utf-8') #lo encodiamos en base64
         else:
@@ -55,9 +57,9 @@ def CrearNovedad(request):
                 url_referencia = url_referencia
                 # Hasta aquí hice yo, el resto del try con el except es de la IA
             )
-        except OperationalError as e:
+        except OperationalError as e: # esto es para que salga un error si la imagen es muy pesada, LO HIZO LA IA
             if e.args[0] == 1153:
-                return JsonResponse({'error': 'La imagen supera el límite permitido. Reducí su tamaño o comprimila antes de subirla.'})
+                return JsonResponse({'error': 'La imagen supera el límite permitido.'})
             return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'})
         return JsonResponse({'mensaje': 'Novedad creada exitosamente'})
     
@@ -80,6 +82,8 @@ def EditarNovedad(request, id):
         novedad = get_object_or_404(Comunicado, id=id)
         # Convertimos la imagen que nos mandan del formulario en base64
         if imagen:
+            if imagen.size > 5 * 1024 * 1024: # establecemos que la imagen sea como máximo de 5MB
+                return JsonResponse({'error' : 'La imagen supera el límite permitido'})
             bytes_imagen = imagen.read() # Leemos los bytes del archivo
             imagen_base64 = base64.b64encode(bytes_imagen).decode('utf-8') #lo encodiamos en base64
         else:
@@ -96,9 +100,9 @@ def EditarNovedad(request, id):
                 url_referencia = url_referencia
                 # Hasta aquí es mío, el try y el except es de la IA
             )
-        except OperationalError as e:
+        except OperationalError as e: # esto es para que salga un error si la imagen es muy pesada, LO HIZO LA IA
             if e.args[0] == 1153:
-                return JsonResponse({'error': 'La imagen supera el límite permitido. Reduce su tamaño o comprimila antes de subirla.'})
+                return JsonResponse({'error': 'La imagen supera el límite permitido.'})
             return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'}) #esto es una correción que me dió la IA para que no hubieran errores en subir imagenes que sean más pesadas de lo permitido
         return JsonResponse({'mensaje': 'Novedad actualizada correctamente'})
     return HttpResponse("Editar Novedades")
