@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import Usuario
@@ -15,7 +15,10 @@ def iniciarSesion(request):
             return HttpResponse("Inicio de sesión exitoso")
         return HttpResponse("Credenciales inválidas")
     
-    return HttpResponse("Iniciar Sesión")
+    # Si alguien accede directamente a /usuarios/ en el navegador
+    if request.user.is_authenticated:
+        return redirect('home')
+    return redirect('login_template')
 
 def registrarse(request):
     if request.method == 'POST':
@@ -38,9 +41,21 @@ def registrarse(request):
         registro = Usuario.objects.create_user(documento = documento, password = password, primer_nombre = primer_nombre, segundo_nombre = segundo_nombre, primer_apellido = primer_apellido, segundo_apellido = segundo_apellido, tipo_documento = tipo_documento, celular = celular, grupo_formacion = grupo_formacion, correo_electronico = correo_electronico, rol = 'APRENDIZ', tipo_apoyo = '')
         login(request, registro)
         return HttpResponse("Usuario registrado exitosamente")
-        
-    return HttpResponse("Registrarse")
+    
+    # GET request - redirigir al login
+    return redirect('login_template')
 
 def cerrarSesion(request):
     logout(request)
-    return HttpResponse("Sesión Cerrada")
+    return redirect('login_template')
+
+
+# ============================================================
+# VISTAS DE TEMPLATES (Frontend) - NO MODIFICAR LAS DE ARRIBA
+# ============================================================
+
+def login_template(request):
+    """Vista que renderiza el template de login/registro"""
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request, 'auth/login.html')

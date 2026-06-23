@@ -1,0 +1,26 @@
+{% load static %}
+<div class="sidebar d-flex flex-column p-3">
+    <div class="text-center mb-4">
+        <img src="{% static 'img/logosena2.png' %}" alt="SENA" class="img-fluid mb-2 logo-sena">
+        <h5 class="titulo">SENA GDF</h5>
+        <p style="color: #dfe6e9;">Administrador</p>
+    </div>
+    <hr style="border-color: rgba(255,255,255,0.1);">
+    <div class="flex-grow-1 d-flex flex-column justify-content-center">
+        <div class="menu-item">
+            <a href="#">
+                <ion-icon name="newspaper-outline" class="menu-icon"></ion-icon> Novedades
+            </a>
+            <div class="submenu">
+                <a href="{% url 'admin_novedad_crear' %}">Agregar Novedades</a>
+                <a href="{% url 'admin_novedades' %}">Eliminar Novedades</a>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-links mt-auto">
+        <hr style="border-color: rgba(255,255,255,0.1);">
+        <a href="{% url 'cerrar_sesion' %}" class="cerrar">
+            <ion-icon name="log-out-outline" class="menu-icon"></ion-icon> Cerrar Sesión
+        </a>
+    </div>
+</div>
