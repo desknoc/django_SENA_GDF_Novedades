@@ -13,7 +13,7 @@
 <div class="p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="d-flex align-items-center gap-2">
-            <ion-icon name="newspaper-outline" style="color: #28a745; font-size: 2rem;"></ion-icon>
+            <ion-icon name="newspaper-outline" style="color: #1e90ff; font-size: 2rem;"></ion-icon>
             Publicaciones - Administrar
         </h3>
         <a href="{% url 'admin_novedad_crear' %}" class="btn btn-success">
@@ -45,19 +45,19 @@
                     <input type="hidden" id="edit-id">
 
                     <div class="form-group">
-                        <label class="form-label"><ion-icon name="newspaper-outline" style="color: #28a745;"></ion-icon> Título</label>
+                        <label class="form-label"><ion-icon name="newspaper-outline" style="color: #1e90ff;"></ion-icon> Título</label>
                         <input type="text" class="form-control" id="edit-titulo" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label"><ion-icon name="document-text-outline" style="color: #28a745;"></ion-icon> Contenido</label>
+                        <label class="form-label"><ion-icon name="document-text-outline" style="color: #1e90ff;"></ion-icon> Contenido</label>
                         <textarea class="form-control" id="edit-contenido" rows="5" required></textarea>
                     </div>
 
                     <div class="row" style="display: flex; gap: 1rem;">
                         <div class="col" style="flex: 1;">
                             <div class="form-group">
-                                <label class="form-label"><ion-icon name="pricetag-outline" style="color: #28a745;"></ion-icon> Categoría</label>
+                                <label class="form-label"><ion-icon name="pricetag-outline" style="color: #1e90ff;"></ion-icon> Categoría</label>
                                 <select class="form-select" id="edit-categoria">
                                     <option value="">Seleccione una categoría</option>
                                     <option value="Noticias">Noticias</option>
@@ -68,14 +68,14 @@
                         </div>
                         <div class="col" style="flex: 1;">
                             <div class="form-group">
-                                <label class="form-label"><ion-icon name="link-outline" style="color: #28a745;"></ion-icon> URL de referencia</label>
+                                <label class="form-label"><ion-icon name="link-outline" style="color: #1e90ff;"></ion-icon> URL de referencia</label>
                                 <input type="url" class="form-control" id="edit-url" placeholder="https://ejemplo.com">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label"><ion-icon name="image-outline" style="color: #28a745;"></ion-icon> Imagen</label>
+                        <label class="form-label"><ion-icon name="image-outline" style="color: #1e90ff;"></ion-icon> Imagen</label>
                         <input type="file" class="form-control" id="edit-imagen" accept="image/*">
                         <small class="text-muted d-block mt-1">Formatos: PNG, JPG, GIF, WebP — Máx 5MB</small>
                         <div id="edit-imagen-preview" class="mt-2" style="display: none;">

@@ -49,7 +49,7 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
             icon: 'warning',
             title: 'Campos incompletos',
             text: 'Por favor, completa todos los campos.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
         return;
     }
@@ -80,14 +80,14 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
                 icon: 'error',
                 title: 'Credenciales inválidas',
                 text: 'Verifica tu documento y contraseña.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
                 text: text || 'Error del servidor. Intenta nuevamente.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
         }
     } catch (error) {
@@ -96,7 +96,7 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
             icon: 'error',
             title: 'Oops...',
             text: 'Error de conexión. Por favor, intenta nuevamente.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
     }
 });
@@ -112,7 +112,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
             icon: 'warning',
             title: 'Contraseña muy corta',
             text: 'La contraseña debe tener al menos 8 caracteres.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
         return;
     }
@@ -134,7 +134,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
                 icon: 'success',
                 title: '¡Registro Exitoso!',
                 text: 'Tu cuenta ha sido creada. Ahora puedes iniciar sesión.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             }).then(() => {
                 container.classList.remove('right-panel-active');
                 this.reset();
@@ -144,14 +144,14 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
                 icon: 'warning',
                 title: 'Usuario existente',
                 text: 'Ese documento ya está registrado.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error en el registro',
                 text: text || 'No se pudo registrar el usuario.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
         }
     } catch (error) {
@@ -160,7 +160,7 @@ document.getElementById('formRegistro').addEventListener('submit', async functio
             icon: 'error',
             title: 'Oops...',
             text: 'Error de conexión. Por favor, intenta nuevamente.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
     }
 });
