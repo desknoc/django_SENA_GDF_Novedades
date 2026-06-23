@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import Usuario
+from senagdf.validators import validar_documento, validar_nombre, validar_celular, validar_correo
 
 # Create your views here.
 
