@@ -56,6 +56,251 @@ El proyecto tiene **dos caras** conviviendo:
 
 Las vistas están deliberadamente separadas en cada `views.py` con comentarios que marcan el límite.
 
+### Modelado UML
+
+Diagramas de clases, componentes y secuencia generados con PlantUML.
+
+#### Diagrama de Clases — Modelo de Datos
+
+![Diagrama de Clases](static/img/uml-classes.png)
+
+<details>
+<summary>Ver código fuente PlantUML</summary>
+
+```plantuml
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam class {
+  BackgroundColor #F8F9FA
+  BorderColor #2C3E50
+  HeaderBackgroundColor #2C3E50
+  HeaderFontColor white
+  FontColor #2C3E50
+}
+
+package "senagdf (config)" {
+  class validators {
+    + {static} validar_documento(documento): bool
+    + {static} validar_nombre(texto): bool
+    + {static} validar_celular(celular): bool
+    + {static} validar_correo(correo): bool
+    + {static} validar_password(password): bool
+  }
+}
+
+package "usuarios" {
+  class UserManager {
+    + create_user(documento, password, **extra_fields): Usuario
+    + create_superuser(documento, password): Usuario
+  }
+
+  class Usuario {
+    - primer_nombre: CharField
+    - segundo_nombre: CharField (nullable)
+    - primer_apellido: CharField
+    - segundo_apellido: CharField (nullable)
+    - tipo_documento: CharField [CC | TI]
+    - documento: CharField {unique}
+    - celular: CharField
+    - grupo_formacion: IntegerField (nullable)
+    - correo_electronico: CharField {unique}
+    - rol: CharField [ADMIN | APRENDIZ]
+    - tipo_apoyo: CharField
+    - fecha_registro: DateField {auto}
+    - ultima_actualizacion: DateField {auto}
+    - is_active: BooleanField
+    - is_staff: BooleanField
+    + USERNAME_FIELD = "documento"
+  }
+
+  UserManager --> Usuario : crea >
+}
+
+package "novedades" {
+  class Comunicado {
+    - id: BigAutoField {PK}
+    - titulo: CharField(200)
+    - contenido: CharField(1000)
+    - categoria: CharField(50)
+    - imagen_url: TextField {base64}
+    - url_referencia: CharField(500)
+    - fecha_publicacion: DateField {auto_now_add}
+    - ultima_actualizacion: DateField {auto_now}
+  }
+}
+
+note top of Comunicado
+  Almacena imágenes como
+  texto base64 en lugar de
+  archivos en disco.
+end note
+
+validators -r-> Usuario : <<validate>>
+validators -r-> Comunicado : <<validate>>
+@enduml
+```
+
+</details>
+
+#### Diagrama de Componentes — Arquitectura en Capas
+
+![Diagrama de Componentes](static/img/uml-components.png)
+
+<details>
+<summary>Ver código fuente PlantUML</summary>
+
+```plantuml
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam component {
+  BackgroundColor #E8F4F8
+  BorderColor #2980B9
+  FontColor #2C3E50
+}
+skinparam database {
+  BackgroundColor #F0F8F0
+  BorderColor #27AE60
+  FontColor #2C3E50
+}
+
+package "FRONTEND (Navegador)" {
+  [Templates HTML\n(Django Template Language)] as TEMPLATES
+  [CSS + Bootstrap 5.3.3] as CSS
+  [Vanilla JS\n(auth.js · novedades.js · main.js)] as JS
+  [SweetAlert2] as SWAL
+  JS --> SWAL : notificaciones
+}
+
+package "BACKEND — django_SENA_GDF_Novedades" {
+  [Root URL Dispatcher\nsenagdf/urls.py] as URLS
+
+  package "senagdf" {
+    [settings.py] as SETTINGS
+    [validators.py] as VALIDATORS
+  }
+
+  package "usuarios" {
+    [usuarios/views.py\nlogin · registro · logout] as U_VIEWS
+    [usuarios/models.py\nUsuario + UserManager] as U_MODELS
+    [usuarios/urls.py] as U_URLS
+  }
+
+  package "novedades" {
+    [novedades/views.py\nHome · CRUD · Templates] as N_VIEWS
+    [novedades/models.py\nComunicado] as N_MODELS
+    [novedades/urls.py] as N_URLS
+  }
+
+  URLS --> U_URLS : include(/usuarios/)
+  URLS --> N_URLS : include(/novedades/)
+  U_URLS --> U_VIEWS
+  N_URLS --> N_VIEWS
+  U_VIEWS --> U_MODELS : ORM
+  U_VIEWS --> VALIDATORS : validate
+  N_VIEWS --> N_MODELS : ORM
+  N_VIEWS --> VALIDATORS : validate
+}
+
+database "MySQL" {
+  [tabla: usuarios_usuario]
+  [tabla: novedades_comunicado]
+  [tabla: auth_* (Django internas)]
+}
+
+U_MODELS --> MySQL : mysqlclient
+N_MODELS --> MySQL : mysqlclient
+
+JS --> URLS : fetch() + FormData\n(AJAX / JSON)
+TEMPLATES --> N_VIEWS : GET render()
+@enduml
+```
+
+</details>
+
+#### Diagrama de Secuencia — Flujo: Crear Novedad
+
+![Diagrama de Secuencia](static/img/uml-sequence.png)
+
+<details>
+<summary>Ver código fuente PlantUML</summary>
+
+```plantuml
+@startuml
+skinparam backgroundColor #FEFEFE
+skinparam sequence {
+  ActorBorderColor #2C3E50
+  ActorFontColor #2C3E50
+  LifeLineBorderColor #3498DB
+  LifeLineBackgroundColor #EAF2F8
+  ParticipantBorderColor #3498DB
+  ParticipantBackgroundColor #EAF2F8
+  ParticipantFontColor #2C3E50
+  ArrowColor #2C3E50
+  NoteBorderColor #F39C12
+  NoteBackgroundColor #FEF9E7
+}
+
+actor "Admin" as ADMIN
+participant "Navegador\n(novedades.js)" as JS
+participant "Django\n(novedades/views.py)" as DJANGO
+participant "senagdf/validators.py" as VAL
+database "MySQL" as DB
+
+ADMIN -> JS: Llena formulario y\nhace clic en Guardar
+activate JS
+
+JS -> JS: Valida campos\nen frontend (opcional)
+note right: Tamaño de imagen,\ncampos requeridos
+
+JS -> DJANGO: POST /novedades/crearnovedad/\n(FormData con imagen)
+activate DJANGO
+
+DJANGO -> DJANGO: Verifica autenticación\ny rol == ADMIN
+note right: request.user\n.is_authenticated\nrequest.user.rol
+
+alt No autenticado o no ADMIN
+  DJANGO --> JS: JsonResponse({error})
+  JS --> ADMIN: SweetAlert error
+  deactivate DJANGO
+end
+
+DJANGO -> DJANGO: Valida tamaño imagen\n(≤ 5MB)
+
+alt Imagen muy pesada
+  DJANGO --> JS: JsonResponse({error})
+  JS --> ADMIN: SweetAlert error
+end
+
+DJANGO -> VAL: validar_magic_bytes()
+activate VAL
+VAL --> DJANGO: True / False
+deactivate VAL
+
+alt Magic bytes inválidos
+  DJANGO --> JS: JsonResponse({error})
+  JS --> ADMIN: SweetAlert error
+end
+
+DJANGO -> DJANGO: Convierte imagen\na base64
+
+DJANGO -> DB: Comunicado.objects.create(\ntitulo, contenido,\ncategoria, imagen_url,\nurl_referencia)
+
+alt OperationalError (MySQL)
+  DB --> DJANGO: Error 1153
+  DJANGO --> JS: JsonResponse({error})
+  JS --> ADMIN: SweetAlert error
+else Éxito
+  DB --> DJANGO: objeto creado
+  DJANGO --> JS: JsonResponse({mensaje})
+  deactivate DJANGO
+  JS --> ADMIN: SweetAlert\n"¡Novedad creada\nexitosamente!"
+  deactivate JS
+end
+@enduml
+```
+
+</details>
+
 ---
 
 ## Patrones de Diseño
