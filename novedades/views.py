@@ -6,6 +6,26 @@ from usuarios.models import Usuario
 import base64 #esto es para poder convertir la imagen que nos den el el formulario a base64
 # Create your views here.
 
+def validar_magic_bytes(bytes_imagen):
+    #Verifica que los bytes correspondan a una imagen válida y no monten archivos que no sean una imágen
+    #Esta implementación de seguridad me lo dió la IA
+    magic_bytes = bytes_imagen[:8]
+    
+    # JPEG: empieza con FF D8 FF
+    if magic_bytes[:3] == b'\xff\xd8\xff':
+        return True
+    # PNG: empieza con 89 50 4E 47
+    if magic_bytes[:4] == b'\x89PNG':
+        return True
+    # GIF: empieza con 47 49 46
+    if magic_bytes[:3] == b'GIF':
+        return True
+    # WebP: empieza con RIFF y en byte 8 tiene WEBP
+    if magic_bytes[:4] == b'RIFF' and bytes_imagen[8:12] == b'WEBP':
+        return True
+    
+    return False
+
 def Home(request):
     if request.method == 'GET':
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -40,7 +60,11 @@ def CrearNovedad(request):
             return JsonResponse({'error': 'Solo los admin pueden crear novedades'})
         # Convertimos la imagen que nos mandan del formulario en base64
         if imagen:
+            if imagen.size > 5 * 1024 * 1024: # establecemos que la imagen sea como máximo de 5MB
+                return JsonResponse({'error' : 'La imagen supera el límite permitido'})
             bytes_imagen = imagen.read() # Leemos los bytes del archivo
+            if not validar_magic_bytes(bytes_imagen):
+                return JsonResponse({'error': 'El archivo no es una imagen válida. Solo se aceptan JPEG, PNG, GIF y WebP.'})
             imagen_base64 = base64.b64encode(bytes_imagen).decode('utf-8') #lo encodiamos en base64
         else:
             imagen_base64 = '' # crea la variable para guardar la imagen codificada fuera del if
@@ -55,9 +79,9 @@ def CrearNovedad(request):
                 url_referencia = url_referencia
                 # Hasta aquí hice yo, el resto del try con el except es de la IA
             )
-        except OperationalError as e:
+        except OperationalError as e: # esto es para que salga un error si la imagen es muy pesada, LO HIZO LA IA
             if e.args[0] == 1153:
-                return JsonResponse({'error': 'La imagen supera el límite permitido. Reducí su tamaño o comprimila antes de subirla.'})
+                return JsonResponse({'error': 'La imagen supera el límite permitido.'})
             return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'})
         return JsonResponse({'mensaje': 'Novedad creada exitosamente'})
     
@@ -80,7 +104,11 @@ def EditarNovedad(request, id):
         novedad = get_object_or_404(Comunicado, id=id)
         # Convertimos la imagen que nos mandan del formulario en base64
         if imagen:
+            if imagen.size > 5 * 1024 * 1024: # establecemos que la imagen sea como máximo de 5MB
+                return JsonResponse({'error' : 'La imagen supera el límite permitido'})
             bytes_imagen = imagen.read() # Leemos los bytes del archivo
+            if not validar_magic_bytes(bytes_imagen):
+                return JsonResponse({'error': 'El archivo no es una imagen válida. Solo se aceptan JPEG, PNG, GIF y WebP.'})
             imagen_base64 = base64.b64encode(bytes_imagen).decode('utf-8') #lo encodiamos en base64
         else:
             imagen_base64 = ''
@@ -96,9 +124,9 @@ def EditarNovedad(request, id):
                 url_referencia = url_referencia
                 # Hasta aquí es mío, el try y el except es de la IA
             )
-        except OperationalError as e:
+        except OperationalError as e: # esto es para que salga un error si la imagen es muy pesada, LO HIZO LA IA
             if e.args[0] == 1153:
-                return JsonResponse({'error': 'La imagen supera el límite permitido. Reduce su tamaño o comprimila antes de subirla.'})
+                return JsonResponse({'error': 'La imagen supera el límite permitido.'})
             return JsonResponse({'error': 'Error de base de datos. Intentalo de nuevo.'}) #esto es una correción que me dió la IA para que no hubieran errores en subir imagenes que sean más pesadas de lo permitido
         return JsonResponse({'mensaje': 'Novedad actualizada correctamente'})
     return HttpResponse("Editar Novedades")
