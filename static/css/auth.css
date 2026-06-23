@@ -7,7 +7,7 @@
 }
 
 .auth-wrapper {
-    background: radial-gradient(circle at center, #28a745 0%, #2d3436 80%);
+    background: radial-gradient(circle at center, #1e90ff 0%, #2d3436 80%);
     min-height: 100vh;
     width: 100%;
     display: flex;
@@ -79,7 +79,7 @@
     left: 50%;
     width: 50%;
     height: 100%;
-    background: #28a745;
+    background: #1e90ff;
     color: #fff;
     transition: all 0.6s ease-in-out;
     z-index: 100;
@@ -162,7 +162,7 @@
 }
 
 .auth-form a {
-    color: #1abc9c;
+    color: #64b5f6;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
@@ -170,7 +170,7 @@
 }
 
 .auth-form a:hover {
-    color: #28a745;
+    color: #1e90ff;
     text-decoration: underline;
 }
 
@@ -192,7 +192,7 @@
 }
 
 .input-group-auth:hover ion-icon {
-    color: #28a745;
+    color: #1e90ff;
 }
 
 .auth-input {
@@ -232,16 +232,16 @@
 .auth-input:hover,
 .auth-select:hover {
     background-color: #ffffff;
-    border-color: rgba(40, 167, 69, 0.5);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.15);
+    border-color: rgba(30, 144, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(30, 144, 255, 0.15);
 }
 
 .auth-input:focus,
 .auth-select:focus {
     outline: none;
     background-color: #ffffff;
-    border-color: #28a745;
-    box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.25);
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.25);
 }
 
 .scroll-form {
@@ -260,18 +260,18 @@
 }
 
 .scroll-form::-webkit-scrollbar-thumb {
-    background: #1abc9c;
+    background: #64b5f6;
     border-radius: 10px;
 }
 
 .scroll-form::-webkit-scrollbar-thumb:hover {
-    background: #28a745;
+    background: #1e90ff;
 }
 
 .auth-btn {
     border-radius: 20px;
-    border: 1px solid #28a745;
-    background-color: #28a745;
+    border: 1px solid #1e90ff;
+    background-color: #1e90ff;
     color: #FFFFFF;
     font-size: 14px;
     font-weight: bold;
@@ -293,7 +293,7 @@
 }
 
 .auth-btn:hover {
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    box-shadow: 0 5px 15px rgba(30, 144, 255, 0.4);
 }
 
 .auth-btn.ghost {
@@ -318,7 +318,7 @@
 
 .logosena-auth:hover {
     transform: scale(1.1) rotate(5deg);
-    filter: drop-shadow(0 10px 18px rgba(40, 167, 69, 0.5));
+    filter: drop-shadow(0 10px 18px rgba(30, 144, 255, 0.5));
 }
 
 .password-toggle {

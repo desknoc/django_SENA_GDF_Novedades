@@ -211,7 +211,7 @@ async function cargarNovedadesAdmin() {
                                 ${escapeHtml(truncarTexto(novedad.contenido, 250))}
                             </p>
                             <div class="d-flex align-items-center text-muted mb-3">
-                                <ion-icon name="calendar-outline" style="margin-right: 8px; color: #28a745;"></ion-icon>
+                                <ion-icon name="calendar-outline" style="margin-right: 8px; color: #1e90ff;"></ion-icon>
                                 <small>${fecha}</small>
                             </div>
                             <div style="display: flex; gap: 0.5rem;">
@@ -284,7 +284,7 @@ async function confirmarEliminar(id) {
                 icon: 'success',
                 title: 'Eliminada',
                 text: 'La novedad se eliminó correctamente.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
             cargarNovedadesAdmin();
         } else {
@@ -296,7 +296,7 @@ async function confirmarEliminar(id) {
             icon: 'error',
             title: 'Error',
             text: 'No se pudo eliminar la novedad.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
     }
 }
@@ -373,7 +373,7 @@ document.getElementById('formEditar')?.addEventListener('submit', async function
                 icon: 'success',
                 title: '¡Actualizada!',
                 text: 'La novedad se actualizó correctamente.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
             cerrarModal();
             cargarNovedadesAdmin();
@@ -386,7 +386,7 @@ document.getElementById('formEditar')?.addEventListener('submit', async function
             icon: 'error',
             title: 'Error',
             text: error.message || 'No se pudo actualizar la novedad.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
     }
 });
@@ -430,7 +430,7 @@ function initFormNovedad() {
                     icon: 'success',
                     title: novedadId ? '¡Actualizada!' : '¡Publicada!',
                     text: `La novedad se ${novedadId ? 'actualizó' : 'creó'} correctamente.`,
-                    confirmButtonColor: '#28a745'
+                    confirmButtonColor: '#1e90ff'
                 });
                 window.location.href = '/novedades/admin/';
             } else {
@@ -442,7 +442,7 @@ function initFormNovedad() {
                 icon: 'error',
                 title: 'Error',
                 text: error.message || 'No se pudo guardar la novedad.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
         } finally {
             btnSubmit.disabled = false;
@@ -478,7 +478,7 @@ async function cargarFormEditar(id) {
             icon: 'error',
             title: 'Error',
             text: 'No se pudo cargar la novedad para editar.',
-            confirmButtonColor: '#28a745'
+            confirmButtonColor: '#1e90ff'
         });
     }
 }
@@ -499,7 +499,7 @@ document.addEventListener('change', function(e) {
                 icon: 'error',
                 title: 'Imagen muy grande',
                 text: 'La imagen no puede superar los 5MB.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
             e.target.value = '';
             return;
@@ -510,7 +510,7 @@ document.addEventListener('change', function(e) {
                 icon: 'error',
                 title: 'Formato inválido',
                 text: 'Solo se permiten imágenes.',
-                confirmButtonColor: '#28a745'
+                confirmButtonColor: '#1e90ff'
             });
             e.target.value = '';
             return;

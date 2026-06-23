@@ -47,7 +47,7 @@
 }
 
 .badge-categoria {
-    background-color: #28a745;
+    background-color: #1e90ff;
     color: white;
 }
 
@@ -67,13 +67,13 @@
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #28a745, #218838);
+    background: linear-gradient(135deg, #1e90ff, #187bcd);
     color: white;
 }
 
 .btn-success:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
 }
 
 .btn-secondary {
@@ -88,15 +88,15 @@
 
 .btn-outline-success {
     background: transparent;
-    border: 1px solid #28a745;
-    color: #28a745;
+    border: 1px solid #1e90ff;
+    color: #1e90ff;
 }
 
 .btn-outline-success:hover {
-    background: linear-gradient(135deg, #28a745, #218838);
+    background: linear-gradient(135deg, #1e90ff, #187bcd);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3);
 }
 
 .btn-outline-danger {
@@ -163,8 +163,8 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #28a745;
-    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.1);
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 0.25rem rgba(30, 144, 255, 0.1);
 }
 
 textarea.form-control {
@@ -187,8 +187,8 @@ textarea.form-control {
 
 .form-select:focus {
     outline: none;
-    border-color: #28a745;
-    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.1);
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 0.25rem rgba(30, 144, 255, 0.1);
 }
 
 /* ========== DETALLE ========== */
@@ -274,8 +274,8 @@ textarea.form-control {
     display: inline-block;
     width: 3rem;
     height: 3rem;
-    border: 0.25rem solid rgba(40, 167, 69, 0.2);
-    border-top-color: #28a745;
+    border: 0.25rem solid rgba(30, 144, 255, 0.2);
+    border-top-color: #1e90ff;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -291,7 +291,7 @@ textarea.form-control {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     object-fit: cover;
-    border: 3px solid #28a745;
+    border: 3px solid #1e90ff;
 }
 
 /* ========== EMPTY STATE ========== */
@@ -376,7 +376,7 @@ textarea.form-control {
 
 /* ========== HEADER GRADIENT ========== */
 .header-gradient {
-    background: linear-gradient(135deg, #28a745, #218838);
+    background: linear-gradient(135deg, #1e90ff, #1565c0);
     color: white;
     padding: 16px 20px;
 }
@@ -389,6 +389,32 @@ textarea.form-control {
 .form-row {
     display: flex;
     gap: 1rem;
+}
+
+/* ========== BOOTSTRAP OVERRIDES - DODGER BLUE ========== */
+.btn-success {
+    background: linear-gradient(135deg, #1e90ff, #187bcd) !important;
+    border-color: #1e90ff !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3) !important;
+    background: linear-gradient(135deg, #187bcd, #1565c0) !important;
+    border-color: #187bcd !important;
+}
+
+.btn-outline-success {
+    background: transparent !important;
+    border: 1px solid #1e90ff !important;
+    color: #1e90ff !important;
+}
+
+.btn-outline-success:hover {
+    background: linear-gradient(135deg, #1e90ff, #187bcd) !important;
+    color: white !important;
+    border-color: #1e90ff !important;
 }
 
 /* ========== RESPONSIVE ========== */
