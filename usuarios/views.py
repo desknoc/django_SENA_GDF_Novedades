@@ -35,6 +35,25 @@ def registrarse(request):
         grupo_formacion = request.POST.get('grupo_formacion')
         correo_electronico = request.POST.get('correo_electronico')
 
+        # Validaciones con regex
+        errores = [] # Metemos los errores dentro de este array para luego mandar una lista de errores
+        if not validar_documento(documento):
+            errores.append("El documento debe tener 10 dígitos")
+        if not validar_nombre(primer_nombre):
+            errores.append("El primer nombre solo puede incluír letras")
+        if segundo_nombre and not validar_nombre(segundo_nombre):
+            errores.append("El segundo nombre solo puede incluír letras")
+        if not validar_nombre(primer_apellido):
+            errores.append("El primer apellido solo puede incluír letras")
+        if segundo_apellido and not validar_nombre(segundo_apellido):
+            errores.append("El segundo apellido solo puede incluír letras")
+        if not validar_celular(celular):
+            errores.append("El celular debe tener 10 dígitos")
+        if not validar_correo(correo_electronico):
+            errores.append("El correo electrónico debe estar completo")
+        if errores:
+            return HttpResponse(" | ".join(errores))
+
         #verificamos si el usuario ya existe
         if Usuario.objects.filter(tipo_documento = tipo_documento, documento = documento).exists():
             return HttpResponse("El usuario ya existe")
